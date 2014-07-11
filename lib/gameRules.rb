@@ -13,48 +13,55 @@ class GameRules
 	end
 
 	def nextGeneration
-		kill_list
-		create_list
+		@living_cells, living_coords = living_cells_info(@board)
 
-		@cells_to_kill.each do |cell|
+		kill_list(@living_cells, living_coords).each do |cell|
 			@board.remove(cell)
 		end
-		
-		@cells_to_add.each do |cell|
+
+		create_list(@living_cells, living_coords).each do |cell|
 			@board.add(cell)
 		end
 	end
 
-	def kill_list
-		@cells_to_kill=[]
-		@living_cells = @board.living_cells
-		living_coords = @living_cells.map{|cell| cell.coords}
-		
-		@cells_to_kill= @living_cells.select do |cell|
-			match_count = (cell.neighbours_of&living_coords).count
-			(match_count <2)||(match_count >3)
+	def living_cells_info(board) 
+		living_cells = board.living_cells
+		living_coords = living_cells.map{|cell| cell.coords}
+		[living_cells, living_coords]	
+	end
+
+	def kill_list(living_cells, living_coords)
+		kill_list= living_cells.select do |cell|
+			kill_rule(cell, living_coords)
 		end
 	end
 
-	def create_list
-		@cells_to_add = []
-		cells_to_check = []
+	def kill_rule(cell, living_coords)
+		match_count = (cell.neighbours_of&living_coords).count
+		(match_count <2)||(match_count >3)
+	end
 
-		@living_cells = @board.living_cells
-		living_coords = @living_cells.map{|cell| cell.coords}
-
-		@living_cells.each do |living_cell| 
-			cells_to_check << living_cell.neighbours_of
+	def create_list(living_cells, living_coords)
+		potential_cells = []
+		living_cells.each do |living_cell| 
+			potential_cells << living_cell.neighbours_of
 		end
-		
-		cells_to_check=cells_to_check.flatten.uniq-living_coords.flatten
+		potential_cells=potential_cells.flatten.uniq-living_coords.flatten
+		cells_to_add = cells_to_create(potential_cells, living_coords)
+	end
 
+	def cells_to_create(cells_to_check, living_cells_coords)
+		cells_to_create = []
 		cells_to_check.each do |cell_coord|
 			new_cell = Cell.new(cell_coord)
-			match_count = (new_cell.neighbours_of&living_coords).count 
-			@cells_to_add<<new_cell if match_count>=4
+			 cells_to_create << new_cell if create_rule(new_cell, living_cells_coords)
 		end
+		cells_to_create
+	end
 
+	def create_rule(potential_cell, living_cells_coords)
+		match_count = (potential_cell.neighbours_of&living_cells_coords).count
+		match_count>=4 
 	end
 
 end

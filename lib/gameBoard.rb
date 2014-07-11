@@ -17,4 +17,5 @@ class GameBoard
 	def match(entity)
 		@living_cells.includes?(entity)
 	end
+	
 end
