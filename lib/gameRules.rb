@@ -1,8 +1,7 @@
 require "gameBoard"
 require "cell"
 
-class GameRules
-
+class GameRules	
 	def initialize(board)
 		@board = board
 	end
@@ -44,7 +43,8 @@ class GameRules
 	end
 
 	def kill_rule(cell_coords, living_coords)
-		match_count = (cell_coords&living_coords).count
+		neigbouring_live_cells_coords=(cell_coords&living_coords)
+		match_count = neigbouring_live_cells_coords.count
 		overcrowded?(match_count)||low_population?(match_count)
 	end
 
