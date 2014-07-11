@@ -41,38 +41,42 @@ class GameRules
 	def ressurect?(count)
 		count>=4
 	end
-	
+
 	def kill_list(living_cells, living_coords)
 		kill_list= living_cells.select do |cell|
-			kill_rule(cell, living_coords)
+			kill_rule(cell.neighbours_of, living_coords)
 		end
 	end
 
-	def kill_rule(cell, living_coords)
-		match_count = (cell.neighbours_of&living_coords).count
+	def kill_rule(cell_coords, living_coords)
+		match_count = (cell_coords&living_coords).count
 		overcrowded?(match_count)||low_population?(match_count)
 	end
 
 	def create_list(living_cells, living_coords)
-		potential_cells = []
-		living_cells.each do |living_cell| 
-			potential_cells << living_cell.neighbours_of
-		end
-		potential_cells=potential_cells.flatten.uniq-living_coords.flatten
-		cells_to_add = cells_to_create(potential_cells, living_coords)
+		potential_cells_coords = potential_cells(living_cells, living_coords)
+		cells_to_create(potential_cells_coords, living_coords)
 	end
 
-	def cells_to_create(cells_to_check, living_cells_coords)
+	def potential_cells(living_cells, living_coords)
+		potential_cells_coords = []
+		living_cells.each do |living_cell| 
+			potential_cells_coords << living_cell.neighbours_of
+		end
+		potential_cells_coords=potential_cells_coords.flatten.uniq-living_coords.flatten
+	end
+
+	def cells_to_create(cells_coords_to_check, living_cells_coords)
 		cells_to_create = []
-		cells_to_check.each do |cell_coord|
+		cells_coords_to_check.each do |cell_coord|
 			new_cell = Cell.new(cell_coord)
-			 cells_to_create << new_cell if create_rule(new_cell, living_cells_coords)
+			cells_to_create << new_cell if create_rule(new_cell.neighbours_of, living_cells_coords)
 		end
 		cells_to_create
 	end
 
-	def create_rule(potential_cell, living_cells_coords)
-		living_cells_overlap = potential_cell.neighbours_of&living_cells_coords
+	def create_rule(potential_cell_coords, living_cells_coords)
+		living_cells_overlap = potential_cell_coords&living_cells_coords
 		match_count = (living_cells_overlap).count
 		ressurect?(match_count)
 	end
