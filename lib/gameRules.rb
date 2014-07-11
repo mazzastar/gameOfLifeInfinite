@@ -53,17 +53,13 @@ class GameRules
 	end
 
 	def potential_cells(living_cells, living_coords)
-		potential_cells = living_cells.map{|living_cell|living_cell.neighbours_of}
+		potential_cells = living_cells.map{|living_cell| living_cell.neighbours_of}
 		potential_cells.flatten.uniq - living_coords.flatten
 	end
 
 	def cells_to_create(cells_coords_to_check, living_cells_coords)
-		cells_to_create = []
-		cells_coords_to_check.each do |cell_coord|
-			new_cell = Cell.new(cell_coord)
-			cells_to_create << new_cell if create_rule(new_cell.neighbours_of, living_cells_coords)
-		end
-		cells_to_create
+		new_cells = cells_coords_to_check.map{|coord| Cell.new(coord)}
+		new_cells.select{|cell| create_rule(cell.neighbours_of, living_cells_coords)}
 	end
 
 	def create_rule(potential_cell_coords, living_cells_coords)
