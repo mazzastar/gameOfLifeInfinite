@@ -9,7 +9,7 @@ class GameRules
 	 @cells_to_add
 
 	def initialize(board)
-		@board=board
+		@board = board
 	end
 
 	def nextGeneration
@@ -43,7 +43,7 @@ class GameRules
 	end
 
 	def kill_list(living_cells, living_coords)
-		kill_list= living_cells.select do |cell|
+		kill_list = living_cells.select do |cell|
 			kill_rule(cell.neighbours_of, living_coords)
 		end
 	end
@@ -63,7 +63,7 @@ class GameRules
 		living_cells.each do |living_cell| 
 			potential_cells_coords << living_cell.neighbours_of
 		end
-		potential_cells_coords=potential_cells_coords.flatten.uniq-living_coords.flatten
+		potential_cells_coords = potential_cells_coords.flatten.uniq-living_coords.flatten
 	end
 
 	def cells_to_create(cells_coords_to_check, living_cells_coords)
