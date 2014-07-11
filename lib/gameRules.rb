@@ -30,6 +30,18 @@ class GameRules
 		[living_cells, living_coords]	
 	end
 
+	def low_population?(count)
+		count <2
+	end
+
+	def overcrowded?(count)
+		count >3
+	end
+
+	def ressurect?(count)
+		count>=4
+	end
+	
 	def kill_list(living_cells, living_coords)
 		kill_list= living_cells.select do |cell|
 			kill_rule(cell, living_coords)
@@ -38,7 +50,7 @@ class GameRules
 
 	def kill_rule(cell, living_coords)
 		match_count = (cell.neighbours_of&living_coords).count
-		(match_count <2)||(match_count >3)
+		overcrowded?(match_count)||low_population?(match_count)
 	end
 
 	def create_list(living_cells, living_coords)
@@ -60,8 +72,9 @@ class GameRules
 	end
 
 	def create_rule(potential_cell, living_cells_coords)
-		match_count = (potential_cell.neighbours_of&living_cells_coords).count
-		match_count>=4 
+		living_cells_overlap = potential_cell.neighbours_of&living_cells_coords
+		match_count = (living_cells_overlap).count
+		ressurect?(match_count)
 	end
 
 end
