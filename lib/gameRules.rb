@@ -7,13 +7,13 @@ class GameRules
 	end
 
 	def nextGeneration
-		@living_cells, living_coords = living_cells_info(@board)
+		living_cells, living_coords = living_cells_info(@board)
 
-		kill_list(@living_cells, living_coords).each do |cell|
+		kill_list(living_cells, living_coords).each do |cell|
 			@board.remove(cell)
 		end
 
-		create_list(@living_cells, living_coords).each do |cell|
+		create_list(living_cells, living_coords).each do |cell|
 			@board.add(cell)
 		end
 	end
