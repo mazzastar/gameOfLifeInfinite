@@ -43,8 +43,7 @@ class GameRules
 	end
 
 	def kill_rule(cell_coords, living_coords)
-		neigbouring_live_cells_coords=(cell_coords&living_coords)
-		match_count = neigbouring_live_cells_coords.count
+		match_count = overlap_count(cell_coords,living_coords)
 		overcrowded?(match_count)||low_population?(match_count)
 	end
 
@@ -68,9 +67,11 @@ class GameRules
 	end
 
 	def create_rule(potential_cell_coords, living_cells_coords)
-		living_cells_overlap = potential_cell_coords&living_cells_coords
-		match_count = (living_cells_overlap).count
+		match_count = overlap_count(potential_cell_coords,living_cells_coords)
 		ressurect?(match_count)
 	end
 
+	def overlap_count(coords1, coords2)
+		(coords1&coords2).count
+	end
 end
