@@ -54,11 +54,8 @@ class GameRules
 	end
 
 	def potential_cells(living_cells, living_coords)
-		potential_cells_coords = []
-		living_cells.each do |living_cell| 
-			potential_cells_coords << living_cell.neighbours_of
-		end
-		potential_cells_coords = potential_cells_coords.flatten.uniq-living_coords.flatten
+		potential_cells = living_cells.map{|living_cell|living_cell.neighbours_of}
+		potential_cells.flatten.uniq - living_coords.flatten
 	end
 
 	def cells_to_create(cells_coords_to_check, living_cells_coords)
