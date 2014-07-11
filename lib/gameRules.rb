@@ -57,13 +57,13 @@ class GameRules
 		dead_cells.flatten.uniq - living_coords.flatten
 	end
 
-	def cells_to_create(coords_to_check, living_cells_coords)
+	def cells_to_create(coords_to_check, living_coords)
 		new_cells = coords_to_check.map{|coord| Cell.new(coord)}
-		new_cells.select{|cell| create_rule(cell.neighbours_of, living_cells_coords)}
+		new_cells.select{|cell| create_rule(cell.neighbours_of, living_coords)}
 	end
 
-	def create_rule(dead_cell_coords, living_cells_coords)
-		match_count = overlap_count(dead_cell_coords,living_cells_coords)
+	def create_rule(dead_coords, living_coords)
+		match_count = overlap_count(dead_coords,living_coords)
 		ressurect?(match_count)
 	end
 
