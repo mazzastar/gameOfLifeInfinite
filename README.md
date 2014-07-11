@@ -1,6 +1,4 @@
-game-of-life-ruby
-=================
+gameOfLifeInfinite
+==================
 
-Conway's Game of Life Kata
-
-New ideas
+An attempt at programming Conway's Game of Life with TDD
