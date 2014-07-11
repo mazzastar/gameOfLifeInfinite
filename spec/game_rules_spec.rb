@@ -76,7 +76,6 @@ describe GameRules do
 			 expect(gameBoard.living_cells.count).to eq 4
 
 			 game.nextGeneration
-
 			 expect(gameBoard.living_cells.count).to eq 5
 			 game.nextGeneration
 			 expect(gameBoard.living_cells.count).to eq 4

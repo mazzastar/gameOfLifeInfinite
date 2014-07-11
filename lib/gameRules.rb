@@ -48,22 +48,22 @@ class GameRules
 	end
 
 	def create_list(living_cells, living_coords)
-		potential_cells_coords = potential_cells(living_cells, living_coords)
-		cells_to_create(potential_cells_coords, living_coords)
+		dead_cells_coords = dead_cells(living_cells, living_coords)
+		cells_to_create(dead_cells_coords, living_coords)
 	end
 
-	def potential_cells(living_cells, living_coords)
-		potential_cells = living_cells.map{|living_cell| living_cell.neighbours_of}
-		potential_cells.flatten.uniq - living_coords.flatten
+	def dead_cells(living_cells, living_coords)
+		dead_cells = living_cells.map{|living_cell| living_cell.neighbours_of}
+		dead_cells.flatten.uniq - living_coords.flatten
 	end
 
-	def cells_to_create(cells_coords_to_check, living_cells_coords)
-		new_cells = cells_coords_to_check.map{|coord| Cell.new(coord)}
+	def cells_to_create(coords_to_check, living_cells_coords)
+		new_cells = coords_to_check.map{|coord| Cell.new(coord)}
 		new_cells.select{|cell| create_rule(cell.neighbours_of, living_cells_coords)}
 	end
 
-	def create_rule(potential_cell_coords, living_cells_coords)
-		match_count = overlap_count(potential_cell_coords,living_cells_coords)
+	def create_rule(dead_cell_coords, living_cells_coords)
+		match_count = overlap_count(dead_cell_coords,living_cells_coords)
 		ressurect?(match_count)
 	end
 
