@@ -3,11 +3,6 @@ require "cell"
 
 class GameRules
 
-	@living_cells
-	 @cells_to_live
-	 @cells_to_kill
-	 @cells_to_add
-
 	def initialize(board)
 		@board = board
 	end
